@@ -1,0 +1,199 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Axelrod Lab — Prisoner's Dilemma Sandbox</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <div class="eyebrow">
+            <span class="live-dot"></span>
+            GAME SIMULATION
+          </div>
+
+          <h1>Axelrod <span>Lab</span></h1>
+
+          <p>
+            A sandbox for exploring strategies in the Iterated Prisoner's
+            Dilemma.
+          </p>
+        </div>
+
+        <div class="hero-note">
+          <span>243 strategies</span>
+          <b
+            >Select participants, configure the experiment, and compare the
+            results.</b
+          >
+        </div>
+      </header>
+
+      <section class="payoff card">
+        <div>
+          <b>Payoff Matrix</b>
+          <small>C — Cooperation · D — Defection</small>
+        </div>
+
+        <div class="matrix" aria-label="Payoff matrix for one round">
+          <span></span>
+          <span>Opponent C</span>
+          <span>Opponent D</span>
+
+          <b>You C</b>
+          <span>3 · 3</span>
+          <span>0 · 5</span>
+
+          <b>You D</b>
+          <span>5 · 0</span>
+          <span>1 · 1</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="card controls">
+          <div class="section-title">
+            <div>
+              <h2>Participants</h2>
+              <p>Choose 2 to 8 strategies</p>
+            </div>
+
+            <span id="count" class="selection-count">0 selected</span>
+          </div>
+
+          <label class="strategy-search" for="strategy-search">
+            <span>Search strategies</span>
+            <input
+              id="strategy-search"
+              type="search"
+              placeholder="e.g. TitForTat, Random"
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="strategy-summary">
+            <span id="visible-count">Loading catalogue…</span
+            ><button id="clear-selection" class="text-button" type="button">
+              Clear
+            </button>
+          </div>
+          <div
+            id="strategy-list"
+            class="strategy-list"
+            aria-live="polite"
+          ></div>
+
+          <div class="section-title settings-title">
+            <div>
+              <h2>Settings</h2>
+              <p>Tournament parameters</p>
+            </div>
+          </div>
+
+          <label>
+            Turns per match
+            <output id="turns-output">150</output>
+            <input id="turns" type="range" min="5" max="500" value="150" />
+          </label>
+
+          <label>
+            Repetitions
+            <output id="repetitions-output">20</output>
+            <input id="repetitions" type="range" min="1" max="100" value="20" />
+          </label>
+
+          <label>
+            Noise
+            <output id="noise-output">0%</output>
+            <input id="noise" type="range" min="0" max="30" value="0" />
+          </label>
+
+          <button id="run" class="primary">
+            Run Tournament
+            <span aria-hidden="true">→</span>
+          </button>
+
+          <p class="hint">
+            Noise changes a player's move to the opposite action with the
+            specified probability.
+          </p>
+        </aside>
+
+        <section class="results card">
+          <div class="section-title">
+            <div>
+              <h2>Tournament Results</h2>
+              <p id="result-subtitle">Select at least two strategies.</p>
+            </div>
+
+            <span id="status" class="status">READY</span>
+          </div>
+
+          <div id="empty" class="empty">
+            <div>◌</div>
+            <b>The ranking will appear here</b>
+            <span>Every player will face every other player.</span>
+          </div>
+
+          <div id="result-content" hidden>
+            <div id="podium" class="podium"></div>
+
+            <div id="chart" class="chart"></div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Strategy</th>
+                    <th>Total Score</th>
+                    <th>Wins</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody id="ranking"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="match-panel" class="match card" hidden>
+        <div class="section-title">
+          <div>
+            <h2>Match: <span id="match-title"></span></h2>
+
+            <p id="match-score"></p>
+          </div>
+
+          <button id="close-match" class="text-button">Close</button>
+        </div>
+
+        <div id="timeline" class="timeline"></div>
+      </section>
+    </main>
+
+    <template id="strategy-template">
+      <label class="strategy">
+        <input type="checkbox" />
+
+        <span class="check"></span>
+
+        <span class="strategy-copy">
+          <b></b>
+          <small></small>
+        </span>
+
+        <span class="strategy-mark" aria-hidden="true">+</span>
+      </label>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
