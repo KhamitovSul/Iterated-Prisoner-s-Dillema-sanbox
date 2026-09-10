@@ -1,23 +1,23 @@
 # Axelrod Lab
 
-Локальное веб-приложение для экспериментов с повторяющейся дилеммой заключённого. Сервер на FastAPI запускает турниры и матчи с библиотекой `Axelrod-Python`, а интерфейс находится в `static/`. База данных и отдельный фронтенд-сборщик не требуются.
+A local web application for experimenting with the **Iterated Prisoner's Dilemma**.
 
-## Требования
+The server is built with **FastAPI** and uses **Axelrod-Python** to run tournaments and individual matches. The frontend is located in `static/`.
 
-- Python 3.10–3.13 с доступной в терминале командой `python`;
-- PowerShell (инструкции ниже рассчитаны на Windows).
+> No database or separate frontend build tool is required.
 
-Проверить Python можно командой:
+---
 
-```powershell
-python --version
-```
+## Requirements
 
-Если команда не найдена, установите Python с [python.org](https://www.python.org/downloads/windows/) и включите опцию **Add Python to PATH**. Затем закройте и заново откройте PowerShell.
+* **Python 3.10–3.13**
+* `python` command available in the terminal
 
-## Быстрый запуск
+---
 
-Из корневой папки проекта выполните:
+## Quick Start
+
+Clone the repository and open the project directory:
 
 ```powershell
 python -m venv .venv
@@ -27,43 +27,113 @@ python -m pip install -r requirements.txt
 python -m uvicorn main:app --reload
 ```
 
-Когда в терминале появится строка `Uvicorn running on http://127.0.0.1:8000`, откройте в браузере:
+When you see:
 
-<http://127.0.0.1:8000>
+```text
+Uvicorn running on http://127.0.0.1:8000
+```
 
-Не открывайте `static/index.html` двойным щелчком: браузер не сможет корректно обратиться к API.
+open:
 
-Чтобы остановить сервер, нажмите `Ctrl+C`. При следующем запуске достаточно активировать окружение и запустить сервер:
+**http://127.0.0.1:8000**
+
+> ⚠️ Do not open `static/index.html` by double-clicking it.
+> The browser will not be able to communicate with the API correctly.
+
+To stop the server:
+
+```text
+Ctrl + C
+```
+
+For subsequent launches:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 python -m uvicorn main:app --reload
 ```
 
-## Если PowerShell блокирует активацию
+---
 
-Активация не обязательна. Выполните команды, явно используя Python из окружения:
+## Live Server
 
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn main:app --reload
-```
-
-## Вариант с Live Server
-
-Интерфейс также можно открыть через расширение Live Server по адресу `http://127.0.0.1:5500`: сервер разрешает этот источник. Но API FastAPI всё равно должен быть запущен на `http://127.0.0.1:8000`, потому что `static/app.js` обращается именно к этому адресу.
-
-## Возможности
-
-- каталог встроенных стратегий `Axelrod-Python` с поиском;
-- круговой турнир между 2–8 стратегиями;
-- настройка ходов (5–500), повторений (1–100) и шума (0–30 %);
-- рейтинг по суммарному счёту и отдельный матч с историей раундов.
-
-## Структура
+The frontend can also be opened using the **Live Server** VS Code extension:
 
 ```text
-main.py          FastAPI-приложение и API симуляций
-requirements.txt Зависимости Python
-static/          HTML, CSS и JavaScript интерфейса
+http://127.0.0.1:5500
 ```
+
+The server allows requests from this origin.
+
+However, the FastAPI server must still be running at:
+
+```text
+http://127.0.0.1:8000
+```
+
+because `static/app.js` sends API requests to this address.
+
+---
+
+## Features
+
+* 🔎 **Strategy catalog** — browse and search built-in `Axelrod-Python` strategies
+* 🏆 **Round-robin tournaments** — compete with 2–8 strategies
+* ⚙️ **Custom parameters** — configure:
+
+  * Turns: **5–500**
+  * Repetitions: **1–100**
+  * Noise: **0–30%**
+* 📊 **Rankings** — compare strategies by total score
+* 🎮 **Individual matches** — play a match between two strategies
+* 📜 **Round history** — inspect the result of every round
+
+---
+
+## Tech Stack
+
+| Technology                  | Purpose                        |
+| --------------------------- | ------------------------------ |
+| **Python**                  | Backend                        |
+| **FastAPI**                 | REST API                       |
+| **Axelrod-Python**          | Prisoner's Dilemma simulations |
+| **HTML / CSS / JavaScript** | Frontend                       |
+| **Uvicorn**                 | ASGI server                    |
+
+---
+
+## Project Structure
+
+```text
+Axelrod Lab/
+│
+├── main.py
+├── requirements.txt
+│
+└── static/
+    ├── index.html
+    ├── styles.css
+    └── app.js
+```
+
+### Main files
+
+* `main.py` — FastAPI application and simulation API
+* `requirements.txt` — Python dependencies
+* `static/index.html` — application interface
+* `static/styles.css` — styling
+* `static/app.js` — frontend logic and API requests
+
+---
+
+## Security
+
+The server does **not execute arbitrary user-submitted Python code**.
+
+Only strategies provided by `Axelrod-Python` can be selected and executed. This is an intentional security limitation.
+
+Supporting user-created strategies would require running untrusted code inside a properly isolated sandbox or runtime.
+
+---
+
+
